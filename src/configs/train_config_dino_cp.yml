@@ -1,0 +1,64 @@
+output_root: '../'
+pytorch_data_dir: '/home/pgrad1/2417023z/DFU2024/STEGO/src/data/'
+experiment_name: "dino_cp_whole"
+log_dir: "DFUdata"
+azureml_logging: True
+submitting_to_aml: False
+
+# Loader params
+num_workers: 8
+max_steps: 2000
+batch_size: 16
+batch_size_per_gpu: 16 
+dataset_name: "DFUdata"
+data_path_train: '/home/pgrad1/2417023z/DFU2024/STEGO/src/data/DFUdata/imgs/train'
+data_path_val: '/home/pgrad1/2417023z/DFU2024/STEGO/src/data/DFUdata/imgs/val'
+n_classes: 10
+continuous: True
+dim: 70
+dino_patch_size: 8
+pretrained_weights: ~
+extra_clusters: 0
+teacher_temp: 0.04
+
+# Model parameters
+model_type: "vit_small"
+arch: "dino"
+
+patch_size: 8 # Size of the patches (in pixels)
+out_dim: 65536  # DINO head output dimensionality
+norm_last_layer: true  # Whether to weight normalize the last layer of the DINO head
+momentum_teacher: 0.996  # Base EMA parameter for teacher update
+use_bn_in_head: false  # Whether to use batch normalization in the DINO head
+
+# Training/Optimization parameters
+use_fp16: true  # Use half-precision (mixed precision) training
+weight_decay: 0.04  # Weight decay value
+lr: 1e-4  # Learning rate
+optimizer: "adamw"  # Optimizer type
+
+# Multi-crop parameters
+mean: [0.485, 0.456, 0.406]
+std: [0.229, 0.224, 0.225]
+global_crops_scale: [0.4, 1.0]  # Scale range for global crops
+local_crops_number: 8  # Number of small local views to generate
+local_crops_scale: [0.05, 0.4]  # Scale range for local crops
+
+# Miscellaneous
+saveckp_freq: 20  # Frequency of saving checkpoints (every x epochs)
+dist_url: "env://"  # URL used for setting up distributed training
+
+# Logging params
+n_images: 4
+scalar_log_freq: 10
+checkpoint_freq: 50
+val_freq: 100
+hist_freq: 100
+
+
+hydra:
+  run:
+    dir: "."
+  output_subdir: ~
+  #job_logging: "disabled"
+  #hydra_logging: "disabled"
